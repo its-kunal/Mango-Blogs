@@ -6,6 +6,7 @@ interface value {
     user: User | null,
     logInUser: () => void,
     logOutUser: () => void,
+    loading: boolean
 }
 
 const AuthCont = createContext<User | null>(null)
@@ -16,9 +17,11 @@ export const useAuthContext = () => {
 
 export default function authContext({ children }: { children: ReactElement }) {
     const [user, setUser] = useState<null | User>(null)
+    const [loading, setLoading] = useState<boolean>(true)
     useEffect(() => {
         onAuthStateChanged(auth, (user) => {
             setUser(user)
+            setLoading(false)
         })
     }, [])
 
@@ -27,6 +30,7 @@ export default function authContext({ children }: { children: ReactElement }) {
         signInWithPopup(auth, provider)
             .then((res) => {
                 setUser(res.user)
+                setLoading(false)
             })
             .catch((err) => {
                 console.log(err)
@@ -40,7 +44,8 @@ export default function authContext({ children }: { children: ReactElement }) {
     const value: value = {
         user,
         logInUser,
-        logOutUser
+        logOutUser,
+        loading
     }
     return (
         <AuthCont.Provider value={user}>
