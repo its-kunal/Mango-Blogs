@@ -24,4 +24,4 @@ dist-ssr
 *.sw?
 
 # Other Environment Files
-fb.config.ts
+src/fb.config.ts
